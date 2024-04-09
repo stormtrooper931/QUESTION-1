@@ -1,0 +1,31 @@
+c, d, t = sym.symbols('c, d, t', positive = True)
+s = sym.symbols('s')
+G = -c/(s**2 - d)
+U = 1
+X = G * U
+x = sym.inverse_laplace_transform(X, s, t)
+x
+
+c, d, t = sym.symbols('c, d, t', positive = True)
+s = sym.symbols('s')
+G = -c/(s**2 - d)
+U = 1 / s
+X = G * U
+x = sym.inverse_laplace_transform(X, s, t)
+x
+
+c, d, t = sym.symbols('c, d, t', positive = True)
+s = sym.symbols('s')
+G = -c/(s**2 - d)
+U = 1 / (s**2 +1)
+X = G * U
+x = sym.inverse_laplace_transform(X, s, t)
+x
+
+c, d, t, w = sym.symbols('c, d, t, w', positive = True)
+s = sym.symbols('s')
+G = -c/(s**2 - d)
+U = w / (s**2 + w**2)
+X = G * U
+x = sym.inverse_laplace_transform(X, s, t)
+x
