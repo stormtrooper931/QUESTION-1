@@ -1,0 +1,34 @@
+import sympy as sym
+x3, x4, F, m, ell, M, g = sym.symbols('x3, x4, F, m, ell, M, g' )
+
+#define psi
+psi = -3 * (m * ell * x4**2 * sym.sin(x3) * sym.cos(x3) + F*sym.cos(x3) - (M +m)*g*sym.sin(x3))
+
+psi /= (4*(M+m) - 3*m*sym.cos(x3)**2)* ell
+
+psi
+
+d_psi_F = psi.diff(F)
+d_psi_x3 = psi.diff(x3)
+d_psi_x4 = psi.diff(x4)
+
+d_psi_x4
+
+psi_eq = psi.subs([(F,0) , (x3,0) , (x4,0)])
+psi_eq
+
+d_psi_F_eq = d_psi_F.subs([(F,0) , (x3,0) , (x4,0)])
+d_psi_x3_eq = d_psi_x3.subs([(F,0) , (x3,0) , (x4,0)])
+d_psi_x4_eq = d_psi_x4.subs([(F,0) , (x3,0) , (x4,0)])
+
+d_psi_x4_eq
+
+
+c, d, t = sym.symbols('c, d, t', positve = True)
+s = sym.symbols('s')
+G = -c/(s**2 - d)
+U = 1 / s
+X = G * U
+x = sym.inverse_laplace_transform(X, s, t)
+
+x
