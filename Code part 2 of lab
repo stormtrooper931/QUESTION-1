@@ -1,0 +1,73 @@
+pip install control
+
+
+import control as ctrl
+import matplotlib.pyplot as plt
+import numpy as np
+
+
+#Define G
+s = ctrl.TransferFunction.s
+G = (s+1) / (s**2 + 0.2*s +1)
+G
+#Impulse response
+t_imp, x_imp = ctrl.impulse_response(G)
+plt.plot(t_imp, x_imp)
+plt.show()
+
+
+#Impulse response
+t_step, x_step = ctrl.step_response(G)
+plt.plot(t_step, x_step)
+plt.grid()
+plt.xlabel('Time')
+plt.ylabel('Step response')
+plt.show()
+
+
+G2 = G / (s**2 + 1)
+t_freq, x_freq = ctrl.impulse_response(G2)
+plt.plot(t_freq, x_freq)
+plt.show()
+
+
+n_points = 500
+t_final = 1
+ts = np.linspace(0, t_final, n_points)
+u = np.sin(20*np.sin(ts)*ts)
+response = ctrl.forced_response(G, ts, u)
+plt.plot(response.time, response.outputs)
+plt.show()
+
+
+M = 0.3
+m = 0.1
+ell = 0.35
+g = 9.81
+c = 3 / ell / (4*M + m)
+d = 3*(M + m)*g / ell / (4*M + m)
+print(f"c = {c}, d = {d}")
+
+
+s = ctrl. TransferFunction.s
+G = -c/(s**2 - d)
+G
+
+
+kp = 10
+ki = 0
+kd = 0
+G_pid = kp + ki/s +kd*s
+#From D to 0
+G_load = ctrl.feedback(G, G_pid, sign=-1)
+G_load
+t_imp, theta_imp = ctrl.impulse_response(G_load)
+plt.plot(t_imp, theta_imp)
+plt.show
+
+
+
+
+
+
+
