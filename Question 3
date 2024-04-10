@@ -1,0 +1,55 @@
+import sympy as sym
+
+# Define symbols
+s, t, w = sym.symbols('s t w', real=True)
+a, b, c, d = sym.symbols('a b c d', real=True, positive=True)
+
+# Define transfer functions
+G_theta = -c / (s**2 - d)
+G_x = a/s - b*c / (s * (d - s**2))
+
+# Impulse response for G_theta
+U_impulse = 1
+X_theta_impulse = G_theta * U_impulse
+x_theta_impulse = sym.inverse_laplace_transform(X_theta_impulse, s, t)
+
+# Step response for G_theta
+U_step = 1 / s
+X_theta_step = G_theta * U_step
+x_theta_step = sym.inverse_laplace_transform(X_theta_step, s, t)
+
+# Frequency response for G_theta
+U_frequency = w / (s**2 + w**2)
+X_theta_frequency = G_theta * U_frequency
+x_theta_frequency = sym.inverse_laplace_transform(X_theta_frequency, s, t)
+
+# Impulse response for G_x
+X_x_impulse = G_x * U_impulse
+x_x_impulse = sym.inverse_laplace_transform(X_x_impulse, s, t)
+
+# Step response for G_x
+X_x_step = G_x * U_step
+x_x_step = sym.inverse_laplace_transform(X_x_step, s, t)
+
+# Frequency response for G_x
+X_x_frequency = G_x * U_frequency
+x_x_frequency = sym.inverse_laplace_transform(X_x_frequency, s, t)
+
+# Display results
+print("Impulse response of G_theta:")
+sym.pprint(x_theta_impulse.simplify())
+
+print("\nStep response of G_theta:")
+sym.pprint(x_theta_step.simplify())
+
+print("\nFrequency response of G_theta:")
+sym.pprint(x_theta_frequency.simplify())
+
+print("\nImpulse response of G_x:")
+sym.pprint(x_x_impulse.simplify())
+
+print("\nStep response of G_x:")
+sym.pprint(x_x_step.simplify())
+
+print("\nFrequency response of G_x:")
+sym.pprint(x_x_frequency.simplify())
