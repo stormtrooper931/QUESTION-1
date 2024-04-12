@@ -1,0 +1,49 @@
+import control as ctrl
+import matplotlib.pyplot as plt
+import numpy as np
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Parameters
+M = 0.3  # Mass of the cart (kg)
+m = 0.1  # Mass of the pendulum (kg)
+l = 0.35  # Length of the pendulum arm (m)
+g = 9.81  # Acceleration due to gravity (m/s^2)
+
+# External force function
+def F(t):
+    return np.sin(100 * t**2)
+
+# Define the system of differential equations
+def pendulum_dynamics(t, state):
+    x, theta, x_dot, theta_dot = state
+
+    x_ddot = (m * l * theta_dot**2 * np.sin(theta) - m * l * theta_dot**2 * np.cos(theta) * np.sin(theta) + F(t)) / (M + m)
+    theta_ddot = (-m * l * theta_dot**2 * np.cos(theta) * np.sin(theta) + m * l * g * np.sin(theta) * np.cos(theta) - (M + m) * g * np.sin(theta)) / (l * (M + m))
+
+    return [x_dot, theta_dot, x_ddot, theta_ddot]
+
+# Initial conditions
+initial_state = [0, 0, 0, 0]  # [x, theta, x_dot, theta_dot]
+
+# Time vector
+t_start = 0
+t_end = 10
+dt = 0.01
+t = np.arange(t_start, t_end, dt)
+
+# Solve the differential equations
+from scipy.integrate import solve_ivp
+sol = solve_ivp(pendulum_dynamics, [t_start, t_end], initial_state, t_eval=t)
+
+# Plot the results
+plt.figure(figsize=(10, 6))
+plt.plot(sol.t, sol.y[1], label='Theta(t)')
+plt.plot(sol.t, sol.y[0], label='X(t)')
+plt.xlabel('Time (s)')
+plt.ylabel('Angle (rad), Displacement (m)')
+plt.title('Trajectories of Theta(t) and X(t)')
+plt.legend()
+plt.grid(True)
+plt.show()
