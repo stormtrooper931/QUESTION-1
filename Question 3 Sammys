@@ -1,0 +1,54 @@
+import sympy as sym
+m, M, ell, F, x, x1, x2, x3, x4, g = sym.symbols('m, M, ell, F, x, x1, x2, x3, x4, g')
+
+w = sym.symbols('\omega', positive = True)
+c, d, t, a, b = sym.symbols('a, c, d, t, b', positive = True)
+s = sym.symbols('s')
+
+#Impulse Response G*
+G = -c/(s**2 - d)
+U = 1
+X = G*U
+x = sym.inverse_laplace_transform(X,s,t)
+x
+
+#Step Response G*
+G = -c/(s**2 - d)
+U = 1/s
+X = G*U
+x = sym.inverse_laplace_transform(X,s,t)
+xsimp = x.simplify()
+xsimp
+
+#Frequency Response G*
+G = -c/(s**2 - d)
+U = w
+U /= ((s**2) + (w**2))
+X = G*U
+x = sym.inverse_laplace_transform(X,s,t)
+xsimp = x.simplify()
+xsimp
+
+#Impulse Response Gx
+G = (a/(s**2))+(c*b/(s**4 - d* s**2))
+U = 1
+X = G*U
+x = sym.inverse_laplace_transform(X,s,t)
+xsimp = x.simplify()
+xsimp
+
+#Step Response Gx
+G = (a/(s**2))+(c*b/(s**4 - d* s**2))
+U = 1/s
+X = G*U
+x = sym.inverse_laplace_transform(X,s,t)
+xsimp = x.simplify()
+xsimp
+
+#Frequency Response Gx
+G = (a/(s**2))+(c*b/(s**4 - d* s**2))
+U = w/((s**2) + (w**2))
+X = G*U
+x = sym.inverse_laplace_transform(X,s,t)
+xsimp = x.simplify()
+xsimp
