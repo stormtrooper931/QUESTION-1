@@ -1,0 +1,54 @@
+import control as ctrl
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+# Given parameters
+M = 0.3  # Mass of the cart (kg)
+m = 0.1  # Mass of the pendulum (kg)
+l = 0.35  # Length of the pendulum arm (m)
+g = 9.81  # Acceleration due to gravity (m/s^2)
+
+# Calculate c and d
+c = 3 / (l * (4 * M + m))
+d = 3 * g * (M + m) / (l * (4 * M + m))
+
+# Define transfer functions
+numerator_theta = [-c]
+denominator_theta = [1, 0, -d]
+numerator_x = [1]
+denominator_x = [1, 0, -d]
+G_theta = ctrl.TransferFunction(numerator_theta, denominator_theta)
+G_x = ctrl.TransferFunction(numerator_x, denominator_x)
+
+# Time vector
+t = np.linspace(0, 10, 1000)  # 10 seconds, 1000 points
+
+# Force input
+force = np.sin(100 * t**2)
+
+# Simulate the system
+t_out, y_out_theta, = ctrl.forced_response(G_theta, T=t, U=force)
+t_out, y_out_x, = ctrl.forced_response(G_x, T=t, U=force)
+
+# Plot the results
+plt.figure(figsize=(12, 6))
+
+plt.subplot(2, 1, 1)
+plt.plot(t_out, y_out_theta, label='Pendulum Angle (theta)')
+plt.xlabel('Time (s)')
+plt.ylabel('Angle (rad)')
+plt.title('Response of Pendulum Angle to Sinusoidal Force')
+plt.legend()
+plt.grid(True)
+
+plt.subplot(2, 1, 2)
+plt.plot(t_out, y_out_x, label='Horizontal Displacement (x)')
+plt.xlabel('Time (s)')
+plt.ylabel('Displacement (m)')
+plt.title('Response of Horizontal Displacement to Sinusoidal Force')
+plt.legend()
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()
