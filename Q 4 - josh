@@ -1,0 +1,46 @@
+!pip install control
+import control as ctrl
+import matplotlib.pyplot as plt
+import numpy as np
+import sympy as sym
+theta = sym.symbols('theta')
+M = 0.3
+m = 0.1
+ell = 35
+g = 9.81
+t = 0.2
+F = sym.sin(100*(t**2))
+
+# Calculate c and d
+c = 3 / (ell * (4 * M + m))
+d = 3 * g * (M + m) / (ell * (4 * M + m))
+
+# Define transfer functions
+numerator_theta = [-c]
+denominator_theta = [1, 0, -d]
+numerator_x = [1]
+denominator_x = [1, 0, -d]
+G_theta = ctrl.TransferFunction(numerator_theta, denominator_theta)
+G_x = ctrl.TransferFunction(numerator_x, denominator_x)
+
+t = np.linspace(0, 0.2, 1000)
+force = np.sin(100 * t**2)
+t_out, y_out_theta, = ctrl.forced_response(G_theta, T=t, U=force)
+t_out, y_out_x, = ctrl.forced_response(G_x, T=t, U=force)
+
+#Plot Graph
+plt.figure(figsize=(12, 8))
+
+plt.subplot(2, 1, 1)
+plt.plot(t_out, y_out_theta*-1, color = 'red', label='Pendulum Angle (theta)')
+plt.plot(t_out, y_out_x*-1, color = 'green', label='Horizontal Displacement (x)')
+plt.xlabel('Time (s)')
+plt.ylabel('Angle (rad)')
+plt.title('Response of Pendulum Angle and Horizontal Displacement to Sinusoidal Force')
+plt.legend()
+plt.grid(True)
+
+
+
+plt.tight_layout()
+plt.show()
